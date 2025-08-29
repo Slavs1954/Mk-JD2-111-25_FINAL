@@ -8,13 +8,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class UserCreate {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     final UUID uuid;
@@ -48,8 +51,8 @@ public class UserCreate {
                       @JsonProperty("status") UserStatus status,
                       @JsonProperty("password") String password) {
         this.uuid = UUID.randomUUID();
-        this.dt_create = System.currentTimeMillis();
-        this.dt_update = System.currentTimeMillis();
+        this.dt_create = Instant.now().toEpochMilli();
+        this.dt_update = Instant.now().toEpochMilli();
         this.mail = mail;
         this.fio = fio;
         this.role = role;

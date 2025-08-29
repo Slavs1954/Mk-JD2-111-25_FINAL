@@ -2,10 +2,7 @@ package by.it_academy.jd2.storage.entity;
 
 import by.it_academy.jd2.dto.enums.UserRole;
 import by.it_academy.jd2.dto.enums.UserStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,8 +27,10 @@ public class UserEntity {
     String mail;
     @Column(name = "fio")
     String fio;
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     UserRole role;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     UserStatus status;
     @Column(name = "password")
