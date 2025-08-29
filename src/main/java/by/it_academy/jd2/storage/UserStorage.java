@@ -4,10 +4,10 @@ import by.it_academy.jd2.dto.User;
 import by.it_academy.jd2.dto.UserCreate;
 import by.it_academy.jd2.storage.api.IUserStorage;
 import by.it_academy.jd2.storage.entity.UserEntity;
-import jakarta.transaction.Transactional;
+import by.it_academy.jd2.storage.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserStorage implements IUserStorage {
 
-    private final JpaRepository<UserEntity, UUID> userRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional

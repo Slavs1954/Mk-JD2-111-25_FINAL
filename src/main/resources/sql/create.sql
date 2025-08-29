@@ -27,3 +27,28 @@ CREATE TABLE IF NOT EXISTS finance_app.users
 
 ALTER TABLE IF EXISTS finance_app.users
     OWNER to postgres;
+
+-- Table: finance_app.mail_verification
+
+-- DROP TABLE IF EXISTS finance_app.mail_verification;
+
+CREATE TABLE IF NOT EXISTS finance_app.mail_verification
+(
+    uuid uuid NOT NULL,
+    user_id uuid NOT NULL,
+    code character varying(100) NOT NULL,
+    verified boolean NOT NULL DEFAULT false,
+    email_count integer NOT NULL DEFAULT 1,
+    dt_create bigint NOT NULL,
+    dt_verified bigint NULL,
+    CONSTRAINT mail_verification_pkey PRIMARY KEY (uuid),
+    CONSTRAINT mail_verification_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES finance_app.users (uuid)
+        ON DELETE CASCADE
+)
+
+    TABLESPACE pg_default;
+
+
+ALTER TABLE IF EXISTS finance_app.mail_verification
+    OWNER to postgres;
