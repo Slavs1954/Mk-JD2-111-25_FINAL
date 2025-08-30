@@ -1,5 +1,7 @@
 package by.it_academy.jd2.controller;
 
+import by.it_academy.jd2.dto.PageOfUser;
+import by.it_academy.jd2.dto.User;
 import by.it_academy.jd2.dto.UserCreate;
 import by.it_academy.jd2.service.UserService;
 import by.it_academy.jd2.validation.groups.OnCreate;
@@ -27,14 +29,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<String> get(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
-        userService.get(page.orElse(0), size.orElse(20));
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PageOfUser> get(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.get(page.orElse(0), size.orElse(20)));
     }
     @GetMapping("/{uuid}")
-    public ResponseEntity<String> getSpecific(@PathVariable UUID uuid) {
-        userService.getByUuid(uuid);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<User> getSpecific(@PathVariable UUID uuid) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getByUuid(uuid));
     }
     @PutMapping("/{uuid}/dt_update/{dt_update}")
     public ResponseEntity<String> update(@PathVariable UUID uuid, @PathVariable long dt_update,

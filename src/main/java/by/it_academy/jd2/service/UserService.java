@@ -1,5 +1,6 @@
 package by.it_academy.jd2.service;
 
+import by.it_academy.jd2.dto.PageOfUser;
 import by.it_academy.jd2.dto.User;
 import by.it_academy.jd2.dto.UserCreate;
 import by.it_academy.jd2.dto.UserRegistration;
@@ -58,7 +59,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User get(int page, int size) {
+    public PageOfUser get(int page, int size) {
         return userStorage.get(page, size);
     }
 
