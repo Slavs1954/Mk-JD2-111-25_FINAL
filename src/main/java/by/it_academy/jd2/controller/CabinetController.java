@@ -1,5 +1,6 @@
 package by.it_academy.jd2.controller;
 
+import by.it_academy.jd2.dto.User;
 import by.it_academy.jd2.dto.UserLogin;
 import by.it_academy.jd2.dto.UserRegistration;
 import by.it_academy.jd2.service.api.IMailerService;
@@ -36,8 +37,9 @@ public class CabinetController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<String> self() {
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<User> self() {
+        // TODO: Read UUID from JWT and fetch required user
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
 }

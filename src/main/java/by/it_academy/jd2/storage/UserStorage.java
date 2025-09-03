@@ -1,14 +1,19 @@
 package by.it_academy.jd2.storage;
 
+import by.it_academy.jd2.dto.PageOfUser;
 import by.it_academy.jd2.dto.User;
 import by.it_academy.jd2.dto.UserCreate;
 import by.it_academy.jd2.storage.api.IUserStorage;
 import by.it_academy.jd2.storage.entity.UserEntity;
 import by.it_academy.jd2.storage.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -61,9 +66,32 @@ public class UserStorage implements IUserStorage {
     }
 
     @Override
-    public User get(int page, int size) {
-        return null;
+    public PageOfUser get(int page, int size) {
+        Page<UserEntity> entityPage = userRepository.findAll(PageRequest.of(page, size));
+        List<User> content = new ArrayList<>();
+        for (UserEntity entity : entityPage.getContent()) {
+            content.add(User.builder()
+                    .uuid(entity.getUuid())
+                    .dt_create(entity.getDt_create())
+                    .dt_update(entity.getDt_update())
+                    .mail(entity.getMail())
+                    .fio(entity.getFio())
+                    .role(entity.getRole())
+                    .status(entity.getStatus())
+                    .build());
+        }
+        return PageOfUser.builder()
+                .number(entityPage.getNumber())
+                .size(entityPage.getSize())
+                .total_pages(entityPage.getTotalPages())
+                .total_elements(entityPage.getTotalElements())
+                .first(entityPage.isFirst())
+                .number_of_elements(entityPage.getNumberOfElements())
+                .last(entityPage.isLast())
+                .content(content)
+                .build();
     }
+
 
     @Override
     public User getByUuid(UUID uuid) {
