@@ -28,11 +28,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public ResponseEntity<PageOfUser> get(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.get(page.orElse(0), size.orElse(20)));
     }
-    @GetMapping("/{uuid}")
+    @GetMapping(path = "/{uuid}", produces = "application/json")
     public ResponseEntity<User> getSpecific(@PathVariable UUID uuid) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getByUuid(uuid));
     }

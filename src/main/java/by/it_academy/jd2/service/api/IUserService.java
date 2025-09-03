@@ -13,4 +13,5 @@ public interface IUserService {
     boolean update( UUID uuid, long dt_update, UserCreate userCreate);
     PageOfUser get(int page, int size);
     User getByUuid(UUID uuid);
+    User login(String mail, String password);
 }
