@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.login.AccountException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -105,5 +106,23 @@ public class UserStorage implements IUserStorage {
                 .role(found.getRole())
                 .status(found.getStatus())
                 .build();
+    }
+
+    @Override
+    public User login(String mail, String password) {
+        UserEntity found = userRepository.findByMail(mail).orElseThrow();
+        if (!found.getPassword().equals(password)) {
+            return null;
+        }
+        return User.builder()
+                .uuid(found.getUuid())
+                .dt_create(found.getDt_create())
+                .dt_update(found.getDt_update())
+                .mail(found.getMail())
+                .fio(found.getFio())
+                .role(found.getRole())
+                .status(found.getStatus())
+                .build();
+
     }
 }

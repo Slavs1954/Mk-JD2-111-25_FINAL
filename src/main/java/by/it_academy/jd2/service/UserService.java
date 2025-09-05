@@ -67,4 +67,9 @@ public class UserService implements IUserService {
     public User getByUuid(UUID uuid) {
         return userStorage.getByUuid(uuid);
     }
+
+    @Override
+    public User login(String mail, String password) {
+        return userStorage.login(mail, password);
+    }
 }
