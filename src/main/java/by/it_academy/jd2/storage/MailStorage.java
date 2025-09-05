@@ -44,6 +44,7 @@ public class MailStorage implements IMailStorage {
         UserEntity user = userRepository.findByMail(mail).orElseThrow();
         MailEntity mailEntity = mailRepository.findByUser_Uuid(user.getUuid());
         mailEntity.setVerified(true);
+        mailEntity.setDt_verified(Instant.now().toEpochMilli());
         user.setStatus(UserStatus.ACTIVE);
         mailRepository.save(mailEntity);
         userRepository.save(user);
