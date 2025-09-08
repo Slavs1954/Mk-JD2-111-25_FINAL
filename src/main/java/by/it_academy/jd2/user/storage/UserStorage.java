@@ -3,6 +3,7 @@ package by.it_academy.jd2.user.storage;
 import by.it_academy.jd2.user.dto.PageOfUser;
 import by.it_academy.jd2.user.dto.User;
 import by.it_academy.jd2.user.dto.UserCreate;
+import by.it_academy.jd2.user.dto.enums.UserStatus;
 import by.it_academy.jd2.user.storage.api.IUserStorage;
 import by.it_academy.jd2.user.storage.entity.UserEntity;
 import by.it_academy.jd2.user.storage.repository.UserRepository;
@@ -110,7 +111,7 @@ public class UserStorage implements IUserStorage {
     @Override
     public User login(String mail, String password) {
         UserEntity found = userRepository.findByMail(mail).orElseThrow();
-        if (!found.getPassword().equals(password)) {
+        if (!found.getPassword().equals(password) || found.getStatus() != UserStatus.ACTIVE) {
             return null;
         }
         return User.builder()
