@@ -1,7 +1,7 @@
 package by.it_academy.jd2.filters;
 
-import by.it_academy.jd2.dto.enums.UserRole;
-import by.it_academy.jd2.service.JwtService;
+import by.it_academy.jd2.user.dto.enums.UserRole;
+import by.it_academy.jd2.user.service.JwtService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -29,32 +31,46 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+       String authHeader = request.getHeader("Authorization");
 
-        String token = null;
-        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+       String token = null;
+       if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
            token = authHeader.substring(7);
-        }
-        try {
+       }
 
-            Claims claims = jwtService.parseToken(token);
+       try {
+           Claims claims = jwtService.parseToken(token);
 
-            String uuid = claims.getSubject();
-            String mail = claims.get("mail").toString();
-            UserRole role = UserRole.valueOf(claims.get("role").toString());
+           //Service or not
+           String tokenType = claims.get("token_type", String.class);
 
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                    uuid,
-                    null,
-                    Collections.emptyList()
-            );
+           UsernamePasswordAuthenticationToken auth;
 
-            auth.setDetails(new WebAuthenticationDetails(request));
+           if ("SERVICE".equals(tokenType)) {
+               String serviceName = claims.getSubject();
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
-        } catch (Exception e) {
-            // Ignore
-        }
-        filterChain.doFilter(request, response);
+               auth = new UsernamePasswordAuthenticationToken(
+                       serviceName,
+                       null,
+                       List.of(new SimpleGrantedAuthority("ROLE_SERVICE"))
+
+               );
+           } else {
+               String uuid = claims.getSubject();
+               String mail = claims.get("mail", String.class);
+               UserRole role = UserRole.valueOf(claims.get("role", String.class));
+
+               auth = new UsernamePasswordAuthenticationToken(
+                       uuid,
+                       null,
+                       List.of(new SimpleGrantedAuthority("ROLE_" + role.name()))
+               );
+           }
+           auth.setDetails(new WebAuthenticationDetails(request));
+           SecurityContextHolder.getContext().setAuthentication(auth);
+       } catch (Exception e) {
+           SecurityContextHolder.clearContext();
+       }
+       filterChain.doFilter(request, response);
     }
 }
