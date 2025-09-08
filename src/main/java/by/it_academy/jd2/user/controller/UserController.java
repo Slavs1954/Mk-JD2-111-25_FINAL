@@ -1,0 +1,47 @@
+package by.it_academy.jd2.user.controller;
+
+import by.it_academy.jd2.user.dto.PageOfUser;
+import by.it_academy.jd2.user.dto.User;
+import by.it_academy.jd2.user.dto.UserCreate;
+import by.it_academy.jd2.user.service.UserService;
+import by.it_academy.jd2.user.groups.OnCreate;
+import by.it_academy.jd2.user.groups.OnUpdate;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/users")
+@RequiredArgsConstructor
+public class UserController {
+
+    private final UserService userService;
+
+    @PostMapping
+    public ResponseEntity<String> create(@Validated(OnCreate.class) @RequestBody UserCreate userCreate) {
+        userService.create(userCreate);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<PageOfUser> get(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.get(page.orElse(0), size.orElse(20)));
+    }
+    @GetMapping(path = "/{uuid}", produces = "application/json")
+    public ResponseEntity<User> getSpecific(@PathVariable UUID uuid) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getByUuid(uuid));
+    }
+    @PutMapping("/{uuid}/dt_update/{dt_update}")
+    public ResponseEntity<String> update(@PathVariable UUID uuid, @PathVariable long dt_update,
+                                         @Validated(OnUpdate.class) @RequestBody UserCreate userCreate) {
+        userService.update(uuid, dt_update, userCreate);
+        return ResponseEntity.ok().build();
+    }
+
+
+}
