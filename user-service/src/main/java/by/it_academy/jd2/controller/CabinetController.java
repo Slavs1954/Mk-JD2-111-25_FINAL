@@ -44,8 +44,7 @@ public class CabinetController {
                 user.getRole()
         );
 
-        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 
     @GetMapping(path = "/me", produces = "application/json")

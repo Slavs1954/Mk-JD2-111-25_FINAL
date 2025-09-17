@@ -15,7 +15,7 @@ public interface IUserService {
     boolean verify(String code, String mail);
     List<UserVerification> getVerificationData(List<Pair<UUID, String>>  idCodePairs);
     UserVerification getVerificationData(UUID uuid, String code);
-    PageOfUser get(int page, int size);
+    Page get(int page, int size);
     User getByUuid(UUID uuid);
     User login(String mail, String password);
 }

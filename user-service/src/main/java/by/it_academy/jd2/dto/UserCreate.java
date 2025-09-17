@@ -21,29 +21,29 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserCreate {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    final UUID uuid;
+    final private UUID uuid;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    final long dt_create;
+    final private long dtCreate;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    final long dt_update;
+    final private long dtUpdate;
 
     @NotBlank(groups = OnCreate.class)
     @Email(groups = OnCreate.class)
-    String mail;
+    private String mail;
 
     @NotBlank(groups = OnCreate.class)
-    String fio;
+    private String fio;
 
     @NotNull(groups = OnCreate.class)
-    UserRole role;
+    private UserRole role;
 
     @NotNull(groups = OnCreate.class)
-    UserStatus status;
+    private UserStatus status;
 
     @NotBlank(groups = OnCreate.class)
-    String password;
+    private String password;
 
     @JsonCreator
     public UserCreate(@JsonProperty("mail") String mail,
@@ -52,8 +52,8 @@ public class UserCreate {
                       @JsonProperty("status") UserStatus status,
                       @JsonProperty("password") String password) {
         this.uuid = UUID.randomUUID();
-        this.dt_create = Instant.now().toEpochMilli();
-        this.dt_update = Instant.now().toEpochMilli();
+        this.dtCreate = Instant.now().toEpochMilli();
+        this.dtUpdate = Instant.now().toEpochMilli();
         this.mail = mail;
         this.fio = fio;
         this.role = role;

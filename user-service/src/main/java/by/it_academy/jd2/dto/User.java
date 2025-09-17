@@ -11,11 +11,11 @@ import java.util.UUID;
 @Data
 @Builder
 public class User {
-    final UUID uuid;
-    final long dt_create;
-    final long dt_update;
-    String mail;
-    String fio;
-    UserRole role;
-    UserStatus status;
+    private final UUID uuid;
+    private final long dtCreate;
+    private final long dtUpdate;
+    private String mail;
+    private String fio;
+    private UserRole role;
+    private UserStatus status;
 }
