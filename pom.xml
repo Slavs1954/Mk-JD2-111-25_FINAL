@@ -18,6 +18,7 @@
         <module>user-service</module>
         <module>mail-service</module>
         <module>common</module>
+        <module>classifier-service</module>
     </modules>
 
     <properties>

@@ -1,7 +1,7 @@
 package by.it_academy.jd2.controller;
 
 
-import by.it_academy.jd2.dto.PageOfUser;
+import by.it_academy.jd2.dto.Page;
 import by.it_academy.jd2.dto.User;
 import by.it_academy.jd2.dto.UserCreate;
 import by.it_academy.jd2.groups.OnCreate;
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping(produces = "application/json")
-    public ResponseEntity<PageOfUser> get(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
+    public ResponseEntity<Page> get(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.get(page.orElse(0), size.orElse(20)));
     }
     @GetMapping(path = "/{uuid}", produces = "application/json")

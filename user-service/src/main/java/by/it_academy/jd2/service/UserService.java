@@ -27,7 +27,6 @@ public class UserService implements IUserService {
     @Override
     public boolean create(UserCreate userCreate) {
         userStorage.add(userCreate);
-        mailServiceClient.add(userCreate.getUuid());
         return true;
     }
     public boolean verify (String code, String mail) {
@@ -66,8 +65,8 @@ public class UserService implements IUserService {
     public boolean create(UserRegistration userRegistration) {
         UserCreate user = UserCreate.builder()
                 .uuid(UUID.randomUUID())
-                .dt_create(Instant.now().toEpochMilli())
-                .dt_update(Instant.now().toEpochMilli())
+                .dtCreate(Instant.now().toEpochMilli())
+                .dtUpdate(Instant.now().toEpochMilli())
                 .mail(userRegistration.getMail())
                 .fio(userRegistration.getFio())
                 .role(UserRole.USER)
@@ -89,7 +88,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public PageOfUser get(int page, int size) {
+    public Page get(int page, int size) {
         return userStorage.get(page, size);
     }
 

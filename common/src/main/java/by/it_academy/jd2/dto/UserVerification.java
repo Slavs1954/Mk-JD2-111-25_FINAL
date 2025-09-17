@@ -8,7 +8,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class UserVerification {
-    UUID userId;
-    String mail;
-    String code;
+    private UUID userId;
+    private String mail;
+    private String code;
 }

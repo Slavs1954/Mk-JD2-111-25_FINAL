@@ -21,9 +21,9 @@ public class UserEntity {
     @Id
     UUID uuid;
     @Column(name = "dt_create")
-    long dt_create;
+    long dtCreate;
     @Column(name = "dt_update")
-    long dt_update;
+    long dtUpdate;
     @Column(name = "mail")
     String mail;
     @Column(name = "fio")

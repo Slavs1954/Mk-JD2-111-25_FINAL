@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class UserRegistration {
-    String mail;
-    String fio;
-    String password;
+    private String mail;
+    private String fio;
+    private String password;
 }
