@@ -19,6 +19,7 @@
         <module>mail-service</module>
         <module>common</module>
         <module>classifier-service</module>
+        <module>account-service</module>
     </modules>
 
     <properties>

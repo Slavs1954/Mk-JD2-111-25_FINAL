@@ -55,4 +55,24 @@ public class ClassifierService implements IClassifierService {
     public PageOfCurrency getPageOfCurrency(int page, int size) {
         return classifierStorage.getAllCurrencies(page, size);
     }
+
+    @Override
+    public Currency getCurrencyByName(String name) {
+        return classifierStorage.getCurrencyByName(name);
+    }
+
+    @Override
+    public OperationCategory getOperationCategoryByName(String name) {
+        return classifierStorage.getOperationCategoryByName(name);
+    }
+
+    @Override
+    public Currency getCurrencyByUuid(UUID uuid) {
+        return classifierStorage.getCurrencyByUuid(uuid);
+    }
+
+    @Override
+    public OperationCategory getOperationCategoryByUuid(UUID uuid) {
+        return classifierStorage.getOperationCategoryByUuid(uuid);
+    }
 }
