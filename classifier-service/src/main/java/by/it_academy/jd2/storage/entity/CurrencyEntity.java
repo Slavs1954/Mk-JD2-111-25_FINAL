@@ -20,17 +20,17 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CurrencyEntity {
     @Id
-    UUID uuid;
+    private UUID uuid;
 
     @Column(name = "dt_create")
-    long dtCreate;
+    private long dtCreate;
 
     @Column(name ="dt_update")
-    long dtUpdate;
+    private long dtUpdate;
 
     @Column(name = "title")
-    String title;
+    private String title;
 
     @Column(name = "description")
-    String description;
+    private String description;
 }

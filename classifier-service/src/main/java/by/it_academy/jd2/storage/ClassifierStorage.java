@@ -13,9 +13,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -25,6 +27,7 @@ public class ClassifierStorage implements IClassifierStorage {
 
 
     @Override
+    @Transactional
     public void addCurrency(Currency currency) {
         CurrencyEntity currencyEntity = CurrencyEntity.builder()
                 .description(currency.getDescription())
@@ -37,6 +40,7 @@ public class ClassifierStorage implements IClassifierStorage {
     }
 
     @Override
+    @Transactional
     public void addOperationCategory(OperationCategory operationCategory) {
         OperationCategoryEntity operationCategoryEntity = OperationCategoryEntity.builder()
                 .uuid(operationCategory.getUuid())
@@ -95,6 +99,52 @@ public class ClassifierStorage implements IClassifierStorage {
                 .numberOfElements(currencyPage.getNumberOfElements())
                 .last(currencyPage.isLast())
                 .content(content)
+                .build();
+    }
+
+    @Override
+    public Currency getCurrencyByName(String title) {
+        CurrencyEntity entity = currencyRepository.findByTitle(title).orElseThrow();
+        return  Currency.builder()
+                .uuid(entity.getUuid())
+                .dtCreate(entity.getDtCreate())
+                .dtUpdate(entity.getDtUpdate())
+                .title(entity.getTitle())
+                .description(entity.getDescription())
+                .build();
+    }
+
+    @Override
+    public OperationCategory getOperationCategoryByName(String title) {
+        OperationCategoryEntity entity = operationCategoryRepository.findByTitle(title).orElseThrow();
+        return OperationCategory.builder()
+                .uuid(entity.getUuid())
+                .dtCreate(entity.getDtCreate())
+                .dtUpdate(entity.getDtUpdate())
+                .title(entity.getTitle())
+                .build();
+    }
+
+    @Override
+    public Currency getCurrencyByUuid(UUID uuid) {
+        CurrencyEntity entity = currencyRepository.findById(uuid).orElseThrow();
+        return  Currency.builder()
+                .uuid(entity.getUuid())
+                .dtCreate(entity.getDtCreate())
+                .dtUpdate(entity.getDtUpdate())
+                .title(entity.getTitle())
+                .description(entity.getDescription())
+                .build();
+    }
+
+    @Override
+    public OperationCategory getOperationCategoryByUuid(UUID uuid) {
+        OperationCategoryEntity entity = operationCategoryRepository.findById(uuid).orElseThrow();
+        return OperationCategory.builder()
+                .uuid(entity.getUuid())
+                .dtCreate(entity.getDtCreate())
+                .dtUpdate(entity.getDtUpdate())
+                .title(entity.getTitle())
                 .build();
     }
 }
