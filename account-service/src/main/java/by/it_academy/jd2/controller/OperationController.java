@@ -17,7 +17,6 @@ public class OperationController {
 
     IOperationService operationService;
 
-    // TODO: write up controllers from openAPI
     @PostMapping("/{uuid}/operation")
     ResponseEntity<String> addOperation(@PathVariable UUID uuid, @RequestBody Operation operation) {
         operationService.save(uuid, operation);
