@@ -158,3 +158,22 @@ CREATE TABLE finance_app.audit (
                                    type VARCHAR(20) NOT NULL CHECK (type IN ('USER', 'REPORT', 'CURRENCY', 'CATEGORY', 'ACCOUNT', 'OPERATION')),
                                    entity_id VARCHAR(255) NOT NULL
 );
+
+CREATE SCHEMA IF NOT EXISTS finance_app;
+
+CREATE TABLE finance_app.scheduled_operation (
+    uuid UUID PRIMARY KEY,
+    dt_create BIGINT NOT NULL,
+    dt_update BIGINT NOT NULL,
+    start_time BIGINT NOT NULL,
+    stop_time BIGINT,
+    repeat_interval BIGINT NOT NULL,
+    time_unit VARCHAR(10) NOT NULL CHECK (
+    time_unit IN ('SECOND','MINUTE','HOUR','DAY','WEEK','MONTH','YEAR')
+    ),
+    account_uuid UUID NOT NULL,
+    description TEXT,
+    value NUMERIC(19,2) NOT NULL,
+    currency_uuid UUID NOT NULL,
+    category_uuid UUID NOT NULL
+);
