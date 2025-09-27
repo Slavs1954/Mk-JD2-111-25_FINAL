@@ -177,3 +177,27 @@ CREATE TABLE finance_app.scheduled_operation (
     currency_uuid UUID NOT NULL,
     category_uuid UUID NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS finance_app.reports
+(
+    uuid uuid NOT NULL,
+    dt_create bigint NOT NULL,
+    dt_update bigint NOT NULL,
+    status character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    report_type character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    description text COLLATE pg_catalog."default",
+    accounts uuid[],
+    categories uuid[],
+    date_from date,
+    date_to date,
+    CONSTRAINT reports_pkey PRIMARY KEY (uuid),
+    CONSTRAINT reports_status_check CHECK (status::text = ANY (ARRAY['LOADED'::character varying, 'PROGRESS'::character varying, 'ERROR'::character varying, 'DONE'::character varying]::text[])),
+    CONSTRAINT reports_report_type_check CHECK (report_type::text = ANY (ARRAY['BALANCE'::character varying, 'BY_DATE'::character varying, 'BY_CATEGORY'::character varying]::text[]))
+)
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS finance_app.reports
+    OWNER to postgres;
+
+
