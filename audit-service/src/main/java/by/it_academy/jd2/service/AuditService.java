@@ -23,4 +23,9 @@ public class AuditService implements IAuditService {
     public Audit getAudit(UUID uuid) {
         return auditStorage.getAudit(uuid);
     }
+
+    @Override
+    public void saveAudit(Audit audit) {
+        auditStorage.saveAudit(audit);
+    }
 }

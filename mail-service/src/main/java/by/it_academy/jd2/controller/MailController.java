@@ -1,6 +1,8 @@
 package by.it_academy.jd2.controller;
 
 
+import by.it_academy.jd2.dto.annotaions.AuditPoint;
+import by.it_academy.jd2.dto.enums.Type;
 import by.it_academy.jd2.service.api.IMailerService;
 import by.it_academy.jd2.utils.api.ICodeGenerator;
 import lombok.AllArgsConstructor;
@@ -18,16 +20,19 @@ public class MailController {
     ICodeGenerator codeGenerator;
 
     @GetMapping
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<Boolean> isVerified(@RequestParam UUID userId) {
         return ResponseEntity.ok(mailerService.isVerified(userId));
     }
 
     @PutMapping
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<Boolean> verify(@RequestParam UUID userId, @RequestParam String code) {
         return ResponseEntity.ok(mailerService.verify(userId, code));
     }
 
     @PostMapping
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<Boolean> add(@RequestParam UUID userId) {
         return ResponseEntity.ok(mailerService.add(userId, codeGenerator.generateCode()));
     }

@@ -9,4 +9,5 @@ public interface IAuditStorage {
 
     Page getPage(int page, int size);
     Audit getAudit(UUID uuid);
+    void saveAudit(Audit audit);
 }

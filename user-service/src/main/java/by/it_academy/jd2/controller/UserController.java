@@ -4,6 +4,8 @@ package by.it_academy.jd2.controller;
 import by.it_academy.jd2.dto.Page;
 import by.it_academy.jd2.dto.User;
 import by.it_academy.jd2.dto.UserCreate;
+import by.it_academy.jd2.dto.annotaions.AuditPoint;
+import by.it_academy.jd2.dto.enums.Type;
 import by.it_academy.jd2.groups.OnCreate;
 import by.it_academy.jd2.groups.OnUpdate;
 import by.it_academy.jd2.service.UserService;
@@ -24,20 +26,24 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<String> create(@Validated(OnCreate.class) @RequestBody UserCreate userCreate) {
         userService.create(userCreate);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping(produces = "application/json")
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<Page> get(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.get(page.orElse(0), size.orElse(20)));
     }
     @GetMapping(path = "/{uuid}", produces = "application/json")
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<User> getSpecific(@PathVariable UUID uuid) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getByUuid(uuid));
     }
     @PutMapping("/{uuid}/dt_update/{dt_update}")
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<String> update(@PathVariable UUID uuid, @PathVariable long dt_update,
                                          @Validated(OnUpdate.class) @RequestBody UserCreate userCreate) {
         userService.update(uuid, dt_update, userCreate);

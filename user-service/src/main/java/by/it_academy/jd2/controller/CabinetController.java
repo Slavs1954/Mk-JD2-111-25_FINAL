@@ -4,6 +4,8 @@ package by.it_academy.jd2.controller;
 import by.it_academy.jd2.dto.User;
 import by.it_academy.jd2.dto.UserLogin;
 import by.it_academy.jd2.dto.UserRegistration;
+import by.it_academy.jd2.dto.annotaions.AuditPoint;
+import by.it_academy.jd2.dto.enums.Type;
 import by.it_academy.jd2.service.api.IJwtService;
 import by.it_academy.jd2.service.api.IUserService;
 import lombok.AllArgsConstructor;
@@ -26,17 +28,20 @@ public class CabinetController {
 
 
     @PostMapping("/registration")
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<String> registration(@RequestBody UserRegistration userRegistration) {
         userService.create(userRegistration);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/verification")
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<String> verification(@RequestParam String code, @RequestParam String mail) {
         userService.verify(code, mail);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     @PostMapping(path = "/login", produces = "application/json")
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<String> login(@RequestBody UserLogin userLogin) {
         User user = userService.login(userLogin.getMail(), userLogin.getPassword());
         String token = jwtService.generateToken(
@@ -49,6 +54,7 @@ public class CabinetController {
     }
 
     @GetMapping(path = "/me", produces = "application/json")
+    @AuditPoint(type = Type.USER)
     public ResponseEntity<User> self() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
