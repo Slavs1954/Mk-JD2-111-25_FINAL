@@ -2,6 +2,8 @@ package by.it_academy.jd2.controller;
 
 import by.it_academy.jd2.dto.Account;
 import by.it_academy.jd2.dto.PageOfAccount;
+import by.it_academy.jd2.dto.annotaions.AuditPoint;
+import by.it_academy.jd2.dto.enums.Type;
 import by.it_academy.jd2.service.api.IAccountService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ public class AccountController {
     private IAccountService accountService;
 
     @PostMapping
+    @AuditPoint(type = Type.ACCOUNT)
     public ResponseEntity<String> createAccount(@RequestBody Account account) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -29,6 +32,7 @@ public class AccountController {
     }
 
     @GetMapping
+    @AuditPoint(type = Type.ACCOUNT)
     public ResponseEntity<PageOfAccount> getAccountPage(Optional<Integer> page, Optional<Integer> size) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -38,10 +42,12 @@ public class AccountController {
     }
 
     @GetMapping("/{uuid}")
+    @AuditPoint(type = Type.ACCOUNT)
     public ResponseEntity<Account> getAccount(@PathVariable UUID uuid) {
         return ResponseEntity.ok().body(accountService.getAccount(uuid));
     }
     @PutMapping("/{uuid}/dt_update/{dt_update}")
+    @AuditPoint(type = Type.ACCOUNT)
     public ResponseEntity<String> updateAccount(@PathVariable UUID uuid, @PathVariable(name = "dt_update") long dtUpdate,
                                                 @RequestBody Account account) {
 

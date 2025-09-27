@@ -1,9 +1,11 @@
 package by.it_academy.jd2.controller;
 
 import by.it_academy.jd2.dto.*;
+import by.it_academy.jd2.dto.annotaions.AuditPoint;
 import by.it_academy.jd2.dto.api.ReportParams;
 import by.it_academy.jd2.dto.enums.ReportStatus;
 import by.it_academy.jd2.dto.enums.ReportType;
+import by.it_academy.jd2.dto.enums.Type;
 import by.it_academy.jd2.service.api.IReportService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,6 +31,7 @@ public class ReportController {
     private final IReportService reportService;
 
     @PostMapping("/{type}")
+    @AuditPoint(type = Type.REPORT)
     public ResponseEntity<Report> createReport(
             @PathVariable ReportType type,
             @RequestBody JsonNode body,
@@ -54,6 +57,7 @@ public class ReportController {
     }
 
     @GetMapping("/{uuid}/export")
+    @AuditPoint(type = Type.REPORT)
     public ResponseEntity<byte[]> getReport(@PathVariable UUID uuid) {
         Report report = reportService.get(uuid);
         if (report == null) {
@@ -71,11 +75,13 @@ public class ReportController {
     }
 
     @GetMapping
+    @AuditPoint(type = Type.REPORT)
     public ResponseEntity<Page> getAllReports(Optional<Integer> page, Optional<Integer> size) {
         return ResponseEntity.status(HttpStatus.OK).body(reportService.getAll(page.orElse(0), size.orElse(20)));
     }
 
     @RequestMapping(path = "/{uuid}/export", method = RequestMethod.HEAD)
+    @AuditPoint(type = Type.REPORT)
     public ResponseEntity<String> processReport(@PathVariable UUID uuid) {
         Report report = reportService.get(uuid);
         if (report == null) {

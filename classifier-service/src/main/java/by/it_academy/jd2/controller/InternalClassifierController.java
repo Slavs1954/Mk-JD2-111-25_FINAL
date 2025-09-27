@@ -2,6 +2,8 @@ package by.it_academy.jd2.controller;
 
 import by.it_academy.jd2.dto.Currency;
 import by.it_academy.jd2.dto.OperationCategory;
+import by.it_academy.jd2.dto.annotaions.AuditPoint;
+import by.it_academy.jd2.dto.enums.Type;
 import by.it_academy.jd2.service.api.IClassifierService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,19 +19,23 @@ public class InternalClassifierController {
     private IClassifierService classifierService;
 
     @GetMapping("/currency")
+    @AuditPoint(type = Type.CURRENCY)
     public ResponseEntity<Currency> getSpecificCurrency(@RequestParam String title) {
         return ResponseEntity.status(HttpStatus.OK).body(classifierService.getCurrencyByName(title));
     }
 
     @GetMapping("/category")
+    @AuditPoint(type = Type.OPERATION)
     public ResponseEntity<OperationCategory> getSpecificCategory(@RequestParam String title) {
         return ResponseEntity.status(HttpStatus.OK).body(classifierService.getOperationCategoryByName(title));
     }
     @GetMapping("/currency/{uuid}")
+    @AuditPoint(type = Type.CURRENCY)
     public ResponseEntity<Currency> getSpecificCurrency(@PathVariable UUID uuid) {
         return ResponseEntity.status(HttpStatus.OK).body(classifierService.getCurrencyByUuid(uuid));
     }
     @GetMapping("/category/{uuid}")
+    @AuditPoint(type = Type.OPERATION)
     public ResponseEntity<OperationCategory> getSpecificCategory(@PathVariable UUID uuid ) {
         return ResponseEntity.status(HttpStatus.OK).body(classifierService.getOperationCategoryByUuid(uuid));
     }

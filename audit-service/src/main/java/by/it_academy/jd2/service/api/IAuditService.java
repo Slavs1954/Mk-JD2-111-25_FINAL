@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface IAuditService {
     Page getPage(int page, int size);
     Audit getAudit(UUID uuid);
+    void saveAudit(Audit audit);
 }

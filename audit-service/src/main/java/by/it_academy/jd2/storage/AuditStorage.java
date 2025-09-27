@@ -67,4 +67,21 @@ public class AuditStorage implements IAuditStorage {
                 .id(auditEntity.getEntityId())
                 .build();
     }
+
+    @Override
+    public void saveAudit(Audit audit) {
+        AuditEntity auditEntity = AuditEntity.builder()
+                .uuid(audit.getUuid())
+                .dtCreate(audit.getDtCreate())
+                .userMail(audit.getUser() != null ? audit.getUser().getMail() : null)
+                .userFio(audit.getUser() != null ? audit.getUser().getFio() : null)
+                .userRole(audit.getUser() != null ? audit.getUser().getRole() : null)
+                .userUuid(audit.getUser() != null ? audit.getUser().getUuid() : null)
+                .text(audit.getText())
+                .type(audit.getType())
+                .entityId(audit.getId())
+                .build();
+        auditRepository.save(auditEntity);
+
+    }
 }
