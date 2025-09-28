@@ -43,4 +43,9 @@ public class CommonJwtService implements ICommonJwtService {
                 .parseSignedClaims(token)
                 .getPayload();
     }
+    @Override
+    public boolean isExpired(String token) {
+        Claims claims = parseToken(token);
+        return claims.getExpiration().toInstant().isBefore(Instant.now());
+    }
 }

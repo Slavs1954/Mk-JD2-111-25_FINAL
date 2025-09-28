@@ -43,6 +43,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
            //Service or not
            String tokenType = claims.get("token_type", String.class);
 
+           //Is expired
+           if (jwtService.isExpired(token)) {
+               response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+           }
+
            UsernamePasswordAuthenticationToken auth;
 
            if ("SERVICE".equals(tokenType)) {

@@ -1,0 +1,121 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    env_file:
+      - ./env/common.env
+    environment:
+      POSTGRES_DB: finance_app
+      POSTGRES_USER: ${DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${DATASOURCE_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+        - postgres_data:/var/lib/postgresql/data
+        - ./src/main/resources/sql/create.sql:/docker-entrypoint-initdb.d/create.sql
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    env_file:
+      - ./env/common.env
+      - ./env/user-service.env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+  mailer-service:
+    build:
+      context: ./mail-service
+      dockerfile: Dockerfile
+    container_name: mailer-service
+    env_file:
+      - ./env/common.env
+      - ./env/mailer-service.env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - user-service
+      - postgres
+    ports:
+      - "8081:8081"
+
+  classifier-service:
+    build:
+      context: ./classifier-service
+      dockerfile: Dockerfile
+    container_name: classifier-service
+    env_file:
+      - ./env/common.env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+    ports:
+      - "8082:8082"
+
+  account-service:
+    build:
+      context: ./account-service
+      dockerfile: Dockerfile
+    container_name: account-service
+    env_file:
+      - ./env/common.env
+      - ./env/account-service.env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - user-service
+      - postgres
+    ports:
+      - "8083:8083"
+
+  audit-service:
+    build:
+      context: ./audit-service
+      dockerfile: Dockerfile
+    container_name: audit-service
+    env_file:
+      - ./env/common.env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+    ports:
+      - "8084:8084"
+
+  scheduler-service:
+    build:
+      context: ./scheduler-service
+      dockerfile: Dockerfile
+    container_name: scheduler-service
+    env_file:
+      - ./env/common.env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+    ports:
+      - "8085:8085"
+
+  report-service:
+    build:
+      context: ./report-service
+      dockerfile: Dockerfile
+    container_name: report-service
+    env_file:
+      - ./env/common.env
+      - ./env/report-service.env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+    ports:
+      - "8086:8086"
+
+volumes:
+  postgres_data:
