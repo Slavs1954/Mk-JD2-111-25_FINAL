@@ -145,23 +145,23 @@ ALTER TABLE IF EXISTS finance_app.operations
 
 CREATE SCHEMA IF NOT EXISTS finance_app;
 
-CREATE TABLE finance_app.audit (
-                                   uuid UUID PRIMARY KEY,
-                                   dt_create BIGINT NOT NULL,
+CREATE TABLE IF NOT EXISTS finance_app.audit (
+   uuid UUID PRIMARY KEY,
+   dt_create BIGINT NOT NULL,
 
-                                   user_uuid UUID NOT NULL,
-                                   user_mail VARCHAR(255) NOT NULL,
-                                   user_fio VARCHAR(255) NOT NULL,
-                                   user_role VARCHAR(20) NOT NULL CHECK (user_role IN ('ADMIN', 'USER', 'MANAGER')),
+   user_uuid UUID NOT NULL,
+   user_mail VARCHAR(255) NOT NULL,
+   user_fio VARCHAR(255) NOT NULL,
+   user_role VARCHAR(20) NOT NULL CHECK (user_role IN ('ADMIN', 'USER', 'MANAGER')),
 
-                                   text TEXT NOT NULL,
-                                   type VARCHAR(20) NOT NULL CHECK (type IN ('USER', 'REPORT', 'CURRENCY', 'CATEGORY', 'ACCOUNT', 'OPERATION')),
-                                   entity_id VARCHAR(255) NOT NULL
+   text TEXT NOT NULL,
+   type VARCHAR(20) NOT NULL CHECK (type IN ('USER', 'REPORT', 'CURRENCY', 'CATEGORY', 'ACCOUNT', 'OPERATION')),
+   entity_id VARCHAR(255) NOT NULL
 );
 
 CREATE SCHEMA IF NOT EXISTS finance_app;
 
-CREATE TABLE finance_app.scheduled_operation (
+CREATE TABLE IF NOT EXISTS finance_app.scheduled_operation (
     uuid UUID PRIMARY KEY,
     dt_create BIGINT NOT NULL,
     dt_update BIGINT NOT NULL,

@@ -6,6 +6,9 @@ import by.it_academy.jd2.dto.enums.UserRole;
 import by.it_academy.jd2.dto.enums.UserStatus;
 import by.it_academy.jd2.service.api.IMailServiceClient;
 import by.it_academy.jd2.service.api.IUserService;
+import by.it_academy.jd2.service.exception.EntityAlreadyExistsException;
+import by.it_academy.jd2.service.exception.InvalidCredentialsException;
+import by.it_academy.jd2.service.exception.UnverifiedLoginException;
 import by.it_academy.jd2.storage.api.IUserStorage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
@@ -26,6 +29,9 @@ public class UserService implements IUserService {
 
     @Override
     public boolean create(UserCreate userCreate) {
+        if (userCreate.getUuid() == null) {
+            userCreate.setUuid(UUID.randomUUID());
+        }
         userStorage.add(userCreate);
         return true;
     }
@@ -63,6 +69,11 @@ public class UserService implements IUserService {
     }
 
     public boolean create(UserRegistration userRegistration) {
+
+        if (userStorage.getByMail(userRegistration.getMail()) != null) {
+            throw new EntityAlreadyExistsException("User already exists");
+        }
+
         UserCreate user = UserCreate.builder()
                 .uuid(UUID.randomUUID())
                 .dtCreate(Instant.now().toEpochMilli())
@@ -101,9 +112,12 @@ public class UserService implements IUserService {
     @Override
     public User login(String mail, String password) {
         User user = userStorage.getByMail(mail);
-        if (Objects.equals(userStorage.getPassword(user.getUuid()), password)) {
-            return user;
+        if (user.getStatus() == UserStatus.WAITING_ACTIVATION) {
+            throw new UnverifiedLoginException("User is unverified");
         }
-        return null;
+        if (!Objects.equals(userStorage.getPassword(user.getUuid()), password)) {
+            throw new InvalidCredentialsException("Wrong credentials");
+        }
+        return user;
     }
 }
