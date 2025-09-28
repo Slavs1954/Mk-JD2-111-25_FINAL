@@ -81,6 +81,7 @@ services:
     container_name: audit-service
     env_file:
       - ./env/common.env
+      - ./env/audit-service.env
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
