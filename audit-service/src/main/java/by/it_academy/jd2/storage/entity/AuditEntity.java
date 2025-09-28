@@ -26,17 +26,17 @@ public class AuditEntity {
     private Long dtCreate; // linux timestamp
 
     // User snapshot fields (embedded inside audit)
-    @Column(name = "user_uuid", nullable = false)
+    @Column(name = "user_uuid")
     private UUID userUuid;
 
-    @Column(name = "user_mail", nullable = false, length = 255)
+    @Column(name = "user_mail", length = 255)
     private String userMail;
 
-    @Column(name = "user_fio", nullable = false, length = 255)
+    @Column(name = "user_fio", length = 255)
     private String userFio;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role", nullable = false, length = 20)
+    @Column(name = "user_role", length = 20)
     private UserRole userRole;
 
     // Audit details

@@ -1,5 +1,6 @@
 package by.it_academy.jd2.controller;
 
+import by.it_academy.jd2.dto.User;
 import by.it_academy.jd2.dto.UserVerification;
 
 import by.it_academy.jd2.dto.annotaions.AuditPoint;
@@ -31,6 +32,12 @@ public class InternalUserController {
     @AuditPoint(type = Type.USER)
     public ResponseEntity<UserVerification> getUserVerification(@RequestParam UUID userId, @RequestParam String code) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getVerificationData(userId, code));
+    }
+
+    @GetMapping(path = "/{uuid}")
+    @AuditPoint(type = Type.USER)
+    public ResponseEntity<User> getSpecific(@PathVariable UUID uuid) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getByUuid(uuid));
     }
 
 }

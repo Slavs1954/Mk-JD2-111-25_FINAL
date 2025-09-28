@@ -149,10 +149,10 @@ CREATE TABLE IF NOT EXISTS finance_app.audit (
    uuid UUID PRIMARY KEY,
    dt_create BIGINT NOT NULL,
 
-   user_uuid UUID NOT NULL,
-   user_mail VARCHAR(255) NOT NULL,
-   user_fio VARCHAR(255) NOT NULL,
-   user_role VARCHAR(20) NOT NULL CHECK (user_role IN ('ADMIN', 'USER', 'MANAGER')),
+   user_uuid UUID,
+   user_mail VARCHAR(255),
+   user_fio VARCHAR(255),
+   user_role VARCHAR(20) CHECK (user_role IN ('ADMIN', 'USER', 'MANAGER')),
 
    text TEXT NOT NULL,
    type VARCHAR(20) NOT NULL CHECK (type IN ('USER', 'REPORT', 'CURRENCY', 'CATEGORY', 'ACCOUNT', 'OPERATION')),
