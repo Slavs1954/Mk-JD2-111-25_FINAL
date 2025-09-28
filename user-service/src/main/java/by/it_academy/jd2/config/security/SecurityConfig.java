@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/cabinet/**").hasAnyRole("USER", "ADMIN")
 
                         // Admin-protected
-                        .requestMatchers("/users/**").hasRole("ADMIN")
+                        .requestMatchers("/users/**").hasAnyRole("ADMIN", "SERVICE")
 
                         .anyRequest().authenticated()
                 )

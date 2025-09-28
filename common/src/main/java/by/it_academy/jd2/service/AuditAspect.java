@@ -47,7 +47,6 @@ public class AuditAspect {
 
     private Audit buildAudit(JoinPoint joinPoint, AuditPoint auditPoint, Object result) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String serviceName = null;
         UUID userUuid = null;
         UserRole userRole = null;
         if (auth != null) {
@@ -57,26 +56,17 @@ public class AuditAspect {
                     .findFirst()
                     .orElse(null);
 
-            if ("ROLE_SERVICE".equals(role)) {
-                serviceName = (String) principal;
-            } else if ("ROLE_USER".equals(role) || "ROLE_ADMIN".equals(role)) {
+            if ("ROLE_USER".equals(role) || "ROLE_ADMIN".equals(role)) {
                 userUuid = UUID.fromString((String) principal);
-                userRole = UserRole.valueOf((String) principal);
-            }
-            else {
-                serviceName = "Anonymous";
+                switch (role) {
+                    case "ROLE_USER" -> userRole = UserRole.USER;
+                    case "ROLE_ADMIN" -> userRole = UserRole.ADMIN;
+                    default -> throw new IllegalArgumentException("Unsupported role: " + role);
+                }
             }
         }
         User user = null;
-        if (serviceName != null) {
-            user = User.builder()
-                    .fio(serviceName)
-                    .uuid(UUID.randomUUID())
-                    .mail("null")
-                    .role(UserRole.MANAGER)
-                    .build();
-        }
-        else if (userUuid != null) {
+        if (userUuid != null) {
             user = User.builder()
                     .uuid(userUuid)
                     .mail("null")
