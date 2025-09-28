@@ -21,25 +21,28 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserCreate {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    final private UUID uuid;
+    private UUID uuid;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    final private long dtCreate;
+    @Builder.Default
+    private long dtCreate = Instant.now().toEpochMilli();
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    final private long dtUpdate;
+    @Builder.Default()
+    private long dtUpdate = Instant.now().toEpochMilli();
 
-    @NotBlank(groups = OnCreate.class)
-    @Email(groups = OnCreate.class)
+    @NotBlank(groups = OnCreate.class, message = "Mail must not be empty")
+    @Email(groups = OnCreate.class, message = "Mail must be a valid email")
     private String mail;
 
-    @NotBlank(groups = OnCreate.class)
     private String fio;
 
-    @NotNull(groups = OnCreate.class)
+    @NotNull(groups = OnCreate.class, message = "Role must not be null")
+    @NotBlank(groups = OnCreate.class, message = "Role must be set" )
     private UserRole role;
 
-    @NotNull(groups = OnCreate.class)
+    @NotNull(groups = OnCreate.class, message = "Status must not be null")
+    @NotBlank(groups = OnCreate.class, message = "Status must be set")
     private UserStatus status;
 
     @NotBlank(groups = OnCreate.class)

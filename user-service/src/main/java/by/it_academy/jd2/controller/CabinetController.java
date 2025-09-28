@@ -8,7 +8,9 @@ import by.it_academy.jd2.dto.annotaions.AuditPoint;
 import by.it_academy.jd2.dto.enums.Type;
 import by.it_academy.jd2.service.api.IJwtService;
 import by.it_academy.jd2.service.api.IUserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ public class CabinetController {
 
     @PostMapping("/registration")
     @AuditPoint(type = Type.USER)
-    public ResponseEntity<String> registration(@RequestBody UserRegistration userRegistration) {
+    public ResponseEntity<String> registration(@Valid @RequestBody UserRegistration userRegistration) {
         userService.create(userRegistration);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
