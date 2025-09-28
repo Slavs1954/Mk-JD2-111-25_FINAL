@@ -122,7 +122,10 @@ public class UserStorage implements IUserStorage {
 
     @Override
     public User getByMail(String mail) {
-        UserEntity entity = userRepository.findByMail(mail).orElseThrow();
+        UserEntity entity = userRepository.findByMail(mail).orElse(null);
+        if (entity == null) {
+            return null;
+        }
         return User.builder()
                 .uuid(entity.getUuid())
                 .dtCreate(entity.getDtCreate())

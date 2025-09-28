@@ -7,6 +7,7 @@ import by.it_academy.jd2.dto.enums.UserStatus;
 import by.it_academy.jd2.service.api.IMailServiceClient;
 import by.it_academy.jd2.service.api.IUserService;
 import by.it_academy.jd2.service.exception.EntityAlreadyExistsException;
+import by.it_academy.jd2.service.exception.EntityDoesNotExistException;
 import by.it_academy.jd2.service.exception.InvalidCredentialsException;
 import by.it_academy.jd2.service.exception.UnverifiedLoginException;
 import by.it_academy.jd2.storage.api.IUserStorage;
@@ -37,6 +38,9 @@ public class UserService implements IUserService {
     }
     public boolean verify (String code, String mail) {
         User user = userStorage.getByMail(mail);
+        if (user == null) {
+            throw new EntityDoesNotExistException("User doesn't exist");
+        }
         boolean isVerified = mailServiceClient.verify(user.getUuid(), code);
         if (!isVerified) {
             return false;
@@ -112,6 +116,9 @@ public class UserService implements IUserService {
     @Override
     public User login(String mail, String password) {
         User user = userStorage.getByMail(mail);
+        if (user == null) {
+            throw new EntityDoesNotExistException("User doesn't exist");
+        }
         if (user.getStatus() == UserStatus.WAITING_ACTIVATION) {
             throw new UnverifiedLoginException("User is unverified");
         }
