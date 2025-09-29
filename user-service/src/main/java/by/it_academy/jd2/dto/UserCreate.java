@@ -6,6 +6,8 @@ import by.it_academy.jd2.dto.enums.UserStatus;
 import by.it_academy.jd2.groups.OnCreate;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @Data
 @Builder
 @AllArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserCreate {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private UUID uuid;
@@ -38,11 +41,9 @@ public class UserCreate {
     private String fio;
 
     @NotNull(groups = OnCreate.class, message = "Role must not be null")
-    @NotBlank(groups = OnCreate.class, message = "Role must be set" )
     private UserRole role;
 
     @NotNull(groups = OnCreate.class, message = "Status must not be null")
-    @NotBlank(groups = OnCreate.class, message = "Status must be set")
     private UserStatus status;
 
     @NotBlank(groups = OnCreate.class)

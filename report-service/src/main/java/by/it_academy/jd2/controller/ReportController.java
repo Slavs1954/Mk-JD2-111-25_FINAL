@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -63,8 +64,8 @@ public class ReportController {
         if (report == null) {
             return ResponseEntity.notFound().build();
         }
-        // TODO: make it return actual file
-        byte[] fakeFile = {1,0,0,1};
+        // TODO: make it return actual .xlsx file
+        byte[] fakeFile = SerializationUtils.serialize(report);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.CONTENT_DISPOSITION,

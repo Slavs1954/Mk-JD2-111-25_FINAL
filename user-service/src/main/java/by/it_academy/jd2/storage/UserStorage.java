@@ -46,22 +46,21 @@ public class UserStorage implements IUserStorage {
         UserEntity existing = userRepository.findById(uuid).orElseThrow();
         existing.setDtUpdate(dtUpdate);
 
-        if (!existing.getMail().equals(user.getMail()) && user.getMail() != null) {
+        if (user.getMail() != null && !existing.getMail().equals(user.getMail())) {
             existing.setMail(user.getMail());
         }
-        if (!existing.getFio().equals(user.getFio()) && user.getFio() != null) {
+        if ( user.getFio() != null && !existing.getFio().equals(user.getFio())) {
             existing.setFio(user.getFio());
         }
-        if (!existing.getRole().equals(user.getRole()) && user.getRole() != null) {
+        if (user.getRole() != null && !existing.getRole().equals(user.getRole()))  {
             existing.setRole(user.getRole());
         }
-        if (!existing.getStatus().equals(user.getStatus()) && user.getStatus() != null) {
+        if (user.getStatus() != null && !existing.getStatus().equals(user.getStatus())) {
             existing.setStatus(user.getStatus());
         }
-        if (!existing.getPassword().equals(user.getPassword()) && user.getPassword() != null) {
+        if (user.getPassword() != null && !existing.getPassword().equals(user.getPassword())) {
             existing.setPassword(user.getPassword());
         }
-        userRepository.save(existing);
         return true;
     }
     @Override
@@ -69,7 +68,6 @@ public class UserStorage implements IUserStorage {
     public void updateStatus(UUID uuid, UserStatus userStatus) {
         UserEntity found = userRepository.findById(uuid).orElseThrow();
         found.setStatus(userStatus);
-        userRepository.save(found);
     }
 
 
